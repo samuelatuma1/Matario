@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Matario.Application\Matario.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="ModelConfigurations\" />
+    <None Remove="ModelConfigurations\AuthenticationModule\" />
+    <None Remove="DbContexts\" />
+    <None Remove="Config\" />
+    <None Remove="DataAccess\" />
+    <None Remove="DataAccess\Common\" />
+    <None Remove="DataAccess\AuthenticationModule\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ModelConfigurations\" />
+    <Folder Include="ModelConfigurations\AuthenticationModule\" />
+    <Folder Include="DbContexts\" />
+    <Folder Include="Config\" />
+    <Folder Include="DataAccess\" />
+    <Folder Include="DataAccess\Common\" />
+    <Folder Include="DataAccess\AuthenticationModule\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.11" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+  </ItemGroup>
+</Project>

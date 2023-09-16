@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Features\" />
+    <None Remove="Contracts\" />
+    <None Remove="Features\Commands\" />
+    <None Remove="Features\Commands\AuthenticationModule\" />
+    <None Remove="Features\Commands\AuthenticationModule\Validators\" />
+    <None Remove="Features\Commands\AuthenticationModule\Handlers\" />
+    <None Remove="Features\Commands\AuthenticationModule\Requests\" />
+    <None Remove="Exceptions\" />
+    <None Remove="AutoMapperProfiles\" />
+    <None Remove="AutoMapperProfiles\AuthenticationModule\" />
+    <None Remove="Contracts\DataAccess\" />
+    <None Remove="Contracts\DataAccess\Common\" />
+    <None Remove="Contracts\DataAccess\AuthenticationModule\" />
+    <None Remove="Contracts\Services\" />
+    <None Remove="Features\Commands\AuthenticationModule\Common\" />
+    <None Remove="Config\" />
+    <None Remove="Utilities\" />
+    <None Remove="Contracts\Services\AuthenticationServiceModule\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Features\Commands\" />
+    <Folder Include="Features\Commands\AuthenticationModule\" />
+    <Folder Include="Features\Commands\AuthenticationModule\Validators\" />
+    <Folder Include="Features\Commands\AuthenticationModule\Handlers\" />
+    <Folder Include="Features\Commands\AuthenticationModule\Requests\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="AutoMapperProfiles\" />
+    <Folder Include="AutoMapperProfiles\AuthenticationModule\" />
+    <Folder Include="Contracts\DataAccess\" />
+    <Folder Include="Contracts\DataAccess\Common\" />
+    <Folder Include="Contracts\DataAccess\AuthenticationModule\" />
+    <Folder Include="Contracts\Services\" />
+    <Folder Include="Features\Commands\AuthenticationModule\Common\" />
+    <Folder Include="Config\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="Contracts\Services\AuthenticationServiceModule\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Matario.Domain\Matario.Domain.csproj" />
+  </ItemGroup>
+</Project>

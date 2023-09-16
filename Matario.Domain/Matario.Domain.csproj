@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Entities\" />
+    <None Remove="Entities\Common\" />
+    <None Remove="Enums\" />
+    <None Remove="Enums\Common\" />
+    <None Remove="Entities\AuthenticationModule\" />
+    <None Remove="Enums\AuthenticationModule\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Entities\Common\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Enums\Common\" />
+    <Folder Include="Entities\AuthenticationModule\" />
+    <Folder Include="Enums\AuthenticationModule\" />
+  </ItemGroup>
+</Project>
