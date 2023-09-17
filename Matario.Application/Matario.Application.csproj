@@ -21,10 +21,15 @@
     <None Remove="Contracts\DataAccess\Common\" />
     <None Remove="Contracts\DataAccess\AuthenticationModule\" />
     <None Remove="Contracts\Services\" />
-    <None Remove="Features\Commands\AuthenticationModule\Common\" />
     <None Remove="Config\" />
     <None Remove="Utilities\" />
     <None Remove="Contracts\Services\AuthenticationServiceModule\" />
+    <None Remove="Features\Queries\" />
+    <None Remove="Features\Queries\AuthenticationModule\" />
+    <None Remove="Features\Queries\AuthenticationModule\Requests\" />
+    <None Remove="Features\Queries\AuthenticationModule\Handlers\" />
+    <None Remove="Features\Queries\AuthenticationModule\Validators\" />
+    <None Remove="Features\Common\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -41,10 +46,15 @@
     <Folder Include="Contracts\DataAccess\Common\" />
     <Folder Include="Contracts\DataAccess\AuthenticationModule\" />
     <Folder Include="Contracts\Services\" />
-    <Folder Include="Features\Commands\AuthenticationModule\Common\" />
     <Folder Include="Config\" />
     <Folder Include="Utilities\" />
     <Folder Include="Contracts\Services\AuthenticationServiceModule\" />
+    <Folder Include="Features\Queries\" />
+    <Folder Include="Features\Queries\AuthenticationModule\" />
+    <Folder Include="Features\Queries\AuthenticationModule\Requests\" />
+    <Folder Include="Features\Queries\AuthenticationModule\Handlers\" />
+    <Folder Include="Features\Queries\AuthenticationModule\Validators\" />
+    <Folder Include="Features\Common\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />

@@ -21,7 +21,7 @@ namespace Matario.Infrastructure.Services.AuthenticationServiceModule
         public string GenerateToken(IEnumerable<Claim> claims, int durationInMinutes)
         {
             var systemSymmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.SecretKey));
-            var signingCredentials = new SigningCredentials(systemSymmetricKey, SecurityAlgorithms.Sha512);
+            var signingCredentials = new SigningCredentials(systemSymmetricKey, SecurityAlgorithms.HmacSha512Signature);
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: signingCredentials

@@ -13,11 +13,17 @@ public class AuthenticationRepository : BaseRepository<User, long>, IAuthenticat
 	{
 	}
 
+    public async Task<User?> FindByEmailAsync(string email)
+    {
+        return await FirstOrDefaultAsync(user => user.Email.Equals(email));
+    }
+
     public async Task<bool> IsUniqueEmail(string email)
     {
         var response = await FirstOrDefaultAsync(user => user.Email.Equals(email));
 
-        return response is not null;
+        return response is null;
     }
+
 }
 

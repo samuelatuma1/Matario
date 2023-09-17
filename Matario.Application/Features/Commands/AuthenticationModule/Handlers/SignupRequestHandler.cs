@@ -31,7 +31,7 @@ namespace Matario.Application.Features.Commands.AuthenticationModule.Handlers
         public async Task<string> Handle(SignupRequest request, CancellationToken cancellationToken)
         {
             // validate sign up request
-            var signupRequestValidator = new SignupRequestValidator();
+            var signupRequestValidator = new SignupRequestValidator(_authRepository);
             var signUpValidationResult = await signupRequestValidator.ValidateAsync(request, cancellationToken);
 
             if (signUpValidationResult.Errors.Any())

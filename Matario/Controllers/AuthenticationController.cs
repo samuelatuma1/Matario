@@ -1,5 +1,6 @@
 ﻿using System;
 using Matario.Application.Features.Commands.AuthenticationModule.Requests;
+using Matario.Application.Features.Queries.AuthenticationModule.Requests;
 using Matario.Controllers.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,13 @@ namespace Matario.Controllers
 		public async Task<string> Signup(SignupRequest signupRequest)
 		{
 			return await _mediator.Send(signupRequest);
+		}
+
+		[EnableRateLimiting("fixed")]
+		[HttpPost("[action]")]
+		public async Task<string> Signin(SigninRequest signinRequest)
+		{
+			return await _mediator.Send(signinRequest);
 		}
 	}
 }
