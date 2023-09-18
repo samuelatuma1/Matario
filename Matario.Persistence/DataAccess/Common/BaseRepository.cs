@@ -15,7 +15,7 @@ namespace Matario.Persistence.DataAccess.Common
             _dbContext = dbContext;
 		}
 
-        public virtual async Task AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
             entity.CreatedAt = DateAndTimeUtilities.Now();
             entity.UpdatedAt = DateAndTimeUtilities.Now();
@@ -23,6 +23,7 @@ namespace Matario.Persistence.DataAccess.Common
 
             await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
         public Task AddRangeAsync(TEntity entity)

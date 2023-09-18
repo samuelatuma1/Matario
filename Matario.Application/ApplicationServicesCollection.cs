@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using Matario.Application.Config;
+using Matario.Application.Contracts.Services.AuthenticationServiceModule;
+using Matario.Application.Services.AuthenticationModule;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +13,10 @@ public static class ApplicationServicesCollection
         services.Configure<HashConfig>(configuration.GetSection(nameof(HashConfig)));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        // Add Services
+        services.AddScoped<IManageJwtService, ManageJwtService>();
+
         return services;
     }
 }

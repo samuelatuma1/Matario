@@ -1,4 +1,5 @@
 ﻿using System;
+using Matario.Application.DTOs.AuthenticationModule;
 using Matario.Application.Features.Commands.AuthenticationModule.Requests;
 using Matario.Application.Features.Queries.AuthenticationModule.Requests;
 using Matario.Controllers.Common;
@@ -20,14 +21,14 @@ namespace Matario.Controllers
 
 		[EnableRateLimiting("fixed")]
 		[HttpPost("[action]")]
-		public async Task<string> Signup(SignupRequest signupRequest)
+		public async Task<AuthenticationResponse> Signup(SignupRequest signupRequest)
 		{
 			return await _mediator.Send(signupRequest);
 		}
 
 		[EnableRateLimiting("fixed")]
 		[HttpPost("[action]")]
-		public async Task<string> Signin(SigninRequest signinRequest)
+		public async Task<AuthenticationResponse> Signin(SigninRequest signinRequest)
 		{
 			return await _mediator.Send(signinRequest);
 		}

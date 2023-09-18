@@ -9,23 +9,23 @@ using Matario.Application.Config;
 using Microsoft.Extensions.Options;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Matario.Application.Contracts.Services.AuthenticationServiceModule;
-using Matario.Application.Features.Commands.AuthenticationModule.Common;
+using Matario.Application.DTOs.AuthenticationModule;
 
 namespace Matario.Application.Features.Queries.AuthenticationModule.Handlers
 {
-	public class SigninRequestHandler : IRequestHandler<SigninRequest, string>
+	public class SigninRequestHandler : IRequestHandler<SigninRequest, AuthenticationResponse>
 	{
         private readonly IAuthenticationRepository _authRepository;
         private readonly HashConfig _hashConfig;
-        private readonly IJwtService _jwtService;
-		public SigninRequestHandler(IAuthenticationRepository authRepository, IOptions<HashConfig> hashConfig, IJwtService jwtService)
-		{
+        private readonly IManageJwtService _manageJwtService;
+        public SigninRequestHandler(IAuthenticationRepository authRepository, IOptions<HashConfig> hashConfig, IManageJwtService manageJwtService)
+        {
             _authRepository = authRepository;
             _hashConfig = hashConfig.Value;
-            _jwtService = jwtService;
+            _manageJwtService = manageJwtService;
         }
 
-        public async Task<string> Handle(SigninRequest request, CancellationToken cancellationToken)
+        public async Task<AuthenticationResponse> Handle(SigninRequest request, CancellationToken cancellationToken)
         {
 			// Validate signin request
 			var signinRequestValidator = new SigninRequestValidator();
@@ -44,7 +44,7 @@ namespace Matario.Application.Features.Queries.AuthenticationModule.Handlers
                 throw new AuthenticationException(string.Format("password invalid for email {0}", request.Email));
             }
 
-            return ManageJwt.GenerateToken(_jwtService, user);
+            return await _manageJwtService.GenerateAccessAndRefreshToken(user);
         }
 	}
 }

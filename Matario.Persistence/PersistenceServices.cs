@@ -20,8 +20,10 @@ public static class PersistenceServices
 
         var serverVersion = new MySqlServerVersion(ServerVersion.AutoDetect(connectionString));
 
+        // Repositories
         services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository< , >));
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         // Replace 'YourDbContext' with the name of your own DbContext derived class.
         services.AddDbContext<ApplicationDbContext>(
             dbContextOptions => dbContextOptions

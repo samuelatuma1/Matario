@@ -6,6 +6,8 @@ namespace Matario.Application.Contracts.Services.AuthenticationServiceModule
 	public interface IJwtService
 	{
         string GenerateToken(IEnumerable<Claim> claims, int durationInMinutes);
+
+        string GenerateToken(IEnumerable<Claim> claims, DateTime expiry);
     }
 }
 

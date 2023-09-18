@@ -6,7 +6,7 @@ namespace Matario.Application.Contracts.DataAccess.Common
 	public interface IBaseRepository<TEntity, TId>
 		where TEntity : BaseEntity<TId>
 	{
-		public Task AddAsync(TEntity entity);
+		public Task<TEntity> AddAsync(TEntity entity);
 
 		public Task AddRangeAsync(TEntity entity);
 

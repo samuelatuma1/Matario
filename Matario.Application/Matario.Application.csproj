@@ -30,6 +30,15 @@
     <None Remove="Features\Queries\AuthenticationModule\Handlers\" />
     <None Remove="Features\Queries\AuthenticationModule\Validators\" />
     <None Remove="Features\Common\" />
+    <None Remove="Features\Commands\NoteModule\" />
+    <None Remove="Features\Commands\NoteModule\Requests\" />
+    <None Remove="Features\Commands\NoteModule\Handlers\" />
+    <None Remove="Features\Commands\NoteModule\Responses\" />
+    <None Remove="Features\Commands\AuthenticationModule\Responses\" />
+    <None Remove="Services\" />
+    <None Remove="Services\AuthenticationModule\" />
+    <None Remove="DTOs\" />
+    <None Remove="DTOs\AuthenticationModule\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -55,6 +64,15 @@
     <Folder Include="Features\Queries\AuthenticationModule\Handlers\" />
     <Folder Include="Features\Queries\AuthenticationModule\Validators\" />
     <Folder Include="Features\Common\" />
+    <Folder Include="Features\Commands\NoteModule\" />
+    <Folder Include="Features\Commands\NoteModule\Requests\" />
+    <Folder Include="Features\Commands\NoteModule\Handlers\" />
+    <Folder Include="Features\Commands\NoteModule\Responses\" />
+    <Folder Include="Features\Commands\AuthenticationModule\Responses\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\AuthenticationModule\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="DTOs\AuthenticationModule\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />

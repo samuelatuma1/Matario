@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Matario.Application.Config;
 using Matario.Application.Contracts.Services.AuthenticationServiceModule;
+using Matario.Application.Utilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,7 +25,21 @@ namespace Matario.Infrastructure.Services.AuthenticationServiceModule
             var signingCredentials = new SigningCredentials(systemSymmetricKey, SecurityAlgorithms.HmacSha512Signature);
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                expires: DateAndTimeUtilities.AddMinutes(durationInMinutes)
+                );
+            return new JwtSecurityTokenHandler().WriteToken(jwtToken);
+
+        }
+
+        public string GenerateToken(IEnumerable<Claim> claims, DateTime expiry)
+        {
+            var systemSymmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.SecretKey));
+            var signingCredentials = new SigningCredentials(systemSymmetricKey, SecurityAlgorithms.HmacSha512Signature);
+            var jwtToken = new JwtSecurityToken(
+                claims: claims,
+                signingCredentials: signingCredentials,
+                expires: expiry
                 );
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
 

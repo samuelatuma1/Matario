@@ -13,6 +13,7 @@
     <None Remove="Enums\Common\" />
     <None Remove="Entities\AuthenticationModule\" />
     <None Remove="Enums\AuthenticationModule\" />
+    <None Remove="Entities\NoteModule\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -21,5 +22,6 @@
     <Folder Include="Enums\Common\" />
     <Folder Include="Entities\AuthenticationModule\" />
     <Folder Include="Enums\AuthenticationModule\" />
+    <Folder Include="Entities\NoteModule\" />
   </ItemGroup>
 </Project>
