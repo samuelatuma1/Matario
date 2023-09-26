@@ -4,7 +4,7 @@ namespace Matario.Models
 	public class ErrorModel
 	{
 		public string Message { get; set; } = string.Empty;
-		public IDictionary<string, string> Errors;
+		public IDictionary<string, string> Errors { get; set; }
 		public ErrorModel()
 		{
 			Errors = new Dictionary<string, string>();

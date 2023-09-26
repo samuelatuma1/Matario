@@ -9,10 +9,16 @@ namespace Matario.Application.Exceptions
             Errors = errors;
         }
 
+        public AuthenticationException(Exception ex) : base(ex.Message)
+        {
+            Errors = new Dictionary<string, string>();
+        }
         public AuthenticationException(string message) : base(message)
         {
             Errors = new Dictionary<string, string>();
         }
+
+
     }
 }
 

@@ -11,6 +11,8 @@ namespace Matario.Domain.Entities.AuthenticationModule
 		public string Password { get; set; } = string.Empty;
 
 		public UserRole UserRole { get; set; }
+
+		public List<Role> Roles { get; set; } = new ();
     }
 }
 

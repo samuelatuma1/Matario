@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Security.Claims;
+using Matario.Application.Constants;
 using Matario.Application.Contracts.DataAccess.AuthenticationModule;
 using Matario.Application.Contracts.Services.AuthenticationServiceModule;
+using Matario.Application.Contracts.UoW;
 using Matario.Application.DTOs.AuthenticationModule;
+using Matario.Application.Exceptions;
 using Matario.Application.Utilities;
 using Matario.Domain.Entities.AuthenticationModule;
+using Matario.Domain.Enums.AuthenticationModule;
 
 namespace Matario.Application.Services.AuthenticationModule
 {
@@ -12,17 +16,16 @@ namespace Matario.Application.Services.AuthenticationModule
 	{
 		private readonly IJwtService _jwtService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
-        public ManageJwtService(IJwtService jwtService, IRefreshTokenRepository refreshTokenRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ManageJwtService(IJwtService jwtService, IRefreshTokenRepository refreshTokenRepository, IUnitOfWork unitOfWork)
         {
             _jwtService = jwtService;
             _refreshTokenRepository = refreshTokenRepository;
+            _unitOfWork = unitOfWork;
         }
         public AccessTokenDTO GenerateAccessToken(User user)
         {
-            const int minutesInAnHour = 60;
-            const int hoursInADay = 24;
-
-            const int accessTokenDuration = minutesInAnHour * hoursInADay;
+            const int accessTokenDuration = ApplicationConstants.TimeConstants.MinutesInAnHour * ApplicationConstants.TimeConstants.HoursInADay;
             var accessTokenExpirationTime = DateAndTimeUtilities.AddMinutes(accessTokenDuration);
 
             var accessTokenClaims = new List<Claim>()
@@ -42,37 +45,43 @@ namespace Matario.Application.Services.AuthenticationModule
 
         public async Task<RefreshToken> GenerateRefreshTokenForUserAsync(User user)
         {
+
             const int minutesInAnHour = 60;
             const int hoursInADay = 24;
             const int daysInAMonth = 30;
 
             const int refreshTokenDuration = minutesInAnHour * hoursInADay * daysInAMonth;
-            DateTime timeNow = DateAndTimeUtilities.Now();
             var refreshTokenExpirationTime = DateAndTimeUtilities.AddMinutes(refreshTokenDuration);
-            RefreshToken? refreshToken = await _refreshTokenRepository.FirstOrDefaultAsync(token => token.UserId == user.Id && token.Revoked == false && token.ExpirationTime > timeNow);
-            if(refreshToken is not null)
-            {
-                return refreshToken;
-            }
+
 
             var refreshTokenClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email)
             };
             var generatedToken = _jwtService.GenerateToken(refreshTokenClaims, refreshTokenExpirationTime);
-            refreshToken = new RefreshToken
+            
+            var refreshTokenFromDb = await _refreshTokenRepository.FirstOrDefaultAsync(token => token.UserId == user.Id);
+            if (refreshTokenFromDb is null)
             {
-                ExpirationTime = refreshTokenExpirationTime,
-                Revoked = false,
-                UseageCount = 0,
-                UserId = user.Id,
-                Token = generatedToken
-            };
+                refreshTokenFromDb = new RefreshToken
+                {
+                    UserId = user.Id
+                };
+                await _refreshTokenRepository.AddAsync(refreshTokenFromDb);
+                await _unitOfWork.SaveChangesAsync();
+            }
 
-            refreshToken = await _refreshTokenRepository.AddAsync(refreshToken);
+            refreshTokenFromDb.ExpirationTime = refreshTokenExpirationTime;
+            refreshTokenFromDb.Revoked = false;
+            refreshTokenFromDb.Token = generatedToken;
+            refreshTokenFromDb.UseageCount = 0;
 
-            return refreshToken;
+            await _refreshTokenRepository.UpdateAsync(refreshTokenFromDb);
+            await _unitOfWork.SaveChangesAsync();
+
+            return refreshTokenFromDb;
         }
+
 
         public async Task<AuthenticationResponse> GenerateAccessAndRefreshToken(User user)
         {
@@ -86,6 +95,39 @@ namespace Matario.Application.Services.AuthenticationModule
                 AccessTokenExpirationTime = accessToken.AccessTokenExpirationTime,
                 RefreshTokenExpirationTime = refreshToken.ExpirationTime
             };
+        }
+
+        public async Task<IEnumerable<Claim>> DecryptToken(string token)
+        {
+            await Task.CompletedTask;
+            // check if token has expired.
+            bool isValidToken = _jwtService.IsValid(token);
+            // if yes, throw exception
+            if (!isValidToken)
+            {
+                throw new UnAuthorizedException("Invalid token");
+            }
+            // Decrypt the token
+            IEnumerable<Claim> claims = _jwtService.DecryptToken(token);
+
+            return claims;
+        }
+        public string? GetClaimValue(IEnumerable<Claim> claims, string claimType)
+        {
+            return claims.FirstOrDefault(claim => claim.Type == claimType)?.Value;
+        }
+        public async Task<bool> IsSuperAdmin(string token)
+        {
+            try
+            {
+                IEnumerable<Claim> claims = await DecryptToken(token);
+                var claimValue = GetClaimValue(claims, ClaimTypes.Role);
+                return UserRole.SuperAdmin.ToString().Equals(claimValue);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

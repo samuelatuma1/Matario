@@ -1,6 +1,7 @@
 ﻿using System;
 using Matario.Application.Contracts.DataAccess.AuthenticationModule;
 using Matario.Domain.Entities.AuthenticationModule;
+using Matario.Domain.Enums.AuthenticationModule;
 using Matario.Persistence.DataAccess.Common;
 using Matario.Persistence.DbContexts;
 
@@ -16,6 +17,16 @@ public class AuthenticationRepository : BaseRepository<User, long>, IAuthenticat
     public async Task<User?> FindByEmailAsync(string email)
     {
         return await FirstOrDefaultAsync(user => user.Email.Equals(email));
+    }
+
+    public async Task<bool> IsSuperAdmin(long userId)
+    {
+        User? user = await FirstOrDefaultAsync(user => user.Id == userId);
+        if(user is null)
+        {
+            return false;
+        }
+        return user.UserRole == UserRole.SuperAdmin;
     }
 
     public async Task<bool> IsUniqueEmail(string email)

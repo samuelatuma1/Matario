@@ -10,6 +10,7 @@ namespace Matario.Application.AutoMapperProfiles.AuthenticationModule
 		public AuthenticationProfile()
 		{
 			CreateMap<SignupRequest, User>().ReverseMap();
+			CreateMap<CreateRoleRequest, Role>();
 		}
 	}
 }

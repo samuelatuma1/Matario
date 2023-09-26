@@ -30,15 +30,18 @@
     <None Remove="Features\Queries\AuthenticationModule\Handlers\" />
     <None Remove="Features\Queries\AuthenticationModule\Validators\" />
     <None Remove="Features\Common\" />
-    <None Remove="Features\Commands\NoteModule\" />
-    <None Remove="Features\Commands\NoteModule\Requests\" />
-    <None Remove="Features\Commands\NoteModule\Handlers\" />
-    <None Remove="Features\Commands\NoteModule\Responses\" />
     <None Remove="Features\Commands\AuthenticationModule\Responses\" />
     <None Remove="Services\" />
     <None Remove="Services\AuthenticationModule\" />
     <None Remove="DTOs\" />
     <None Remove="DTOs\AuthenticationModule\" />
+    <None Remove="Contracts\UoW\" />
+    <None Remove="Constants\" />
+    <None Remove="Features\Commands\OrganisationModule\" />
+    <None Remove="Features\Commands\OrganisationModule\Handlers\" />
+    <None Remove="Features\Commands\OrganisationModule\Commands\" />
+    <None Remove="Features\Commands\OrganisationModule\Responses\" />
+    <None Remove="Features\Commands\OrganisationModule\Validators\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -64,15 +67,18 @@
     <Folder Include="Features\Queries\AuthenticationModule\Handlers\" />
     <Folder Include="Features\Queries\AuthenticationModule\Validators\" />
     <Folder Include="Features\Common\" />
-    <Folder Include="Features\Commands\NoteModule\" />
-    <Folder Include="Features\Commands\NoteModule\Requests\" />
-    <Folder Include="Features\Commands\NoteModule\Handlers\" />
-    <Folder Include="Features\Commands\NoteModule\Responses\" />
     <Folder Include="Features\Commands\AuthenticationModule\Responses\" />
     <Folder Include="Services\" />
     <Folder Include="Services\AuthenticationModule\" />
     <Folder Include="DTOs\" />
     <Folder Include="DTOs\AuthenticationModule\" />
+    <Folder Include="Contracts\UoW\" />
+    <Folder Include="Constants\" />
+    <Folder Include="Features\Commands\OrganisationModule\" />
+    <Folder Include="Features\Commands\OrganisationModule\Handlers\" />
+    <Folder Include="Features\Commands\OrganisationModule\Commands\" />
+    <Folder Include="Features\Commands\OrganisationModule\Responses\" />
+    <Folder Include="Features\Commands\OrganisationModule\Validators\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />

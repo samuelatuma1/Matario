@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Matario.Application.Contracts.Services.AuthenticationServiceModule;
 using Matario.Application.DTOs.AuthenticationModule;
+using Matario.Domain.Entities.AuthenticationModule;
 
 namespace Matario.Application.Features.Queries.AuthenticationModule.Handlers
 {
@@ -29,7 +30,7 @@ namespace Matario.Application.Features.Queries.AuthenticationModule.Handlers
         {
 			// Validate signin request
 			var signinRequestValidator = new SigninRequestValidator();
-            var validatedRequest = await signinRequestValidator.ValidateAsync(request);
+            var validatedRequest = await signinRequestValidator.ValidateAsync(request, cancellationToken);
             // if valid
             if (validatedRequest.Errors.Any())
             {
@@ -37,14 +38,19 @@ namespace Matario.Application.Features.Queries.AuthenticationModule.Handlers
                 throw new ValidationException("Validation error occured", errors);
             }
             // hash password
-            var user = await _authRepository.FindByEmailAsync(request.Email) ?? throw new AuthenticationException(string.Format("user with email {0} not found", request.Email));
-            var hashedRequestPassword = EncryptionUtilities.HashString(request.Password, _hashConfig.SecretKey);
-            if (!user.Password.Equals(hashedRequestPassword))
-            {
-                throw new AuthenticationException(string.Format("password invalid for email {0}", request.Email));
-            }
+            User user = await _authRepository.FindByEmailAsync(request.Email) ?? throw new AuthenticationException(string.Format("user with email {0} not found", request.Email));
+            ValidateUserPasswordOrRaiseException(user, request.Password);
 
             return await _manageJwtService.GenerateAccessAndRefreshToken(user);
+        }
+
+        private void ValidateUserPasswordOrRaiseException(User user, string password)
+        {
+            var hashedRequestPassword = EncryptionUtilities.HashString(password, _hashConfig.SecretKey);
+            if (!user.Password.Equals(hashedRequestPassword))
+            {
+                throw new AuthenticationException(string.Format("password invalid for email {0}", user.Email));
+            }
         }
 	}
 }

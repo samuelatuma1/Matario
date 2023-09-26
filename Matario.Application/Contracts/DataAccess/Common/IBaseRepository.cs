@@ -6,7 +6,7 @@ namespace Matario.Application.Contracts.DataAccess.Common
 	public interface IBaseRepository<TEntity, TId>
 		where TEntity : BaseEntity<TId>
 	{
-		public Task<TEntity> AddAsync(TEntity entity);
+		public Task AddAsync(TEntity entity);
 
 		public Task AddRangeAsync(TEntity entity);
 
@@ -14,9 +14,9 @@ namespace Matario.Application.Contracts.DataAccess.Common
 
         public Task UpdateRangeAsync(Func<TEntity, bool> query, TEntity entity);
 
-		public int Delete(TEntity entity, bool soft = true);
+		public Task<int> DeleteAsync(TEntity entity, bool soft = true);
 
-		public int Delete(TId id, bool soft = true);
+		public Task<int> DeleteByIdAsync(TId id, bool soft = true);
 
 		public Task<TEntity?> FindByIdAsync(TId id);
 

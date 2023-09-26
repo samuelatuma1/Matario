@@ -5,6 +5,9 @@ using System.Threading.RateLimiting;
 using Matario.Application;
 using Matario.Infrastructure;
 using Matario.Persistence;
+using Matario.Filters;
+using Matario.Application.Contracts.Services.AuthenticationServiceModule;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -25,6 +28,8 @@ builder.Services.Configure<RateLimitOptions>(builder.Configuration.GetSection(na
 builder.Configuration.GetSection(nameof(RateLimitOptions)).Bind(rateLimitOptions);
 var fixedPolicy = "fixed";
 
+
+
 builder.Services.AddRateLimiter(_ => _
     .AddFixedWindowLimiter(policyName: fixedPolicy, options =>
     {
@@ -34,7 +39,12 @@ builder.Services.AddRateLimiter(_ => _
         options.QueueLimit = rateLimitOptions.QueueLimit;
     }));
 
+builder.Services.AddScoped<IsSuperAdminFilter<IManageJwtService>>();
 var app = builder.Build();
+
+//  Register Filters
+
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 

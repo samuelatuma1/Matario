@@ -3,6 +3,7 @@ using AutoMapper;
 using Matario.Application.Config;
 using Matario.Application.Contracts.DataAccess.AuthenticationModule;
 using Matario.Application.Contracts.Services.AuthenticationServiceModule;
+using Matario.Application.Contracts.UoW;
 using Matario.Application.DTOs.AuthenticationModule;
 using Matario.Application.Exceptions;
 using Matario.Application.Features.Commands.AuthenticationModule.Requests;
@@ -20,12 +21,14 @@ namespace Matario.Application.Features.Commands.AuthenticationModule.Handlers
         private readonly IAuthenticationRepository _authRepository;
         private readonly HashConfig _hashConfig;
         private readonly IManageJwtService _manageJwtService;
-        public SignupRequestHandler(IMapper mapper, IAuthenticationRepository authRepository, IOptions<HashConfig> hashConfig, IManageJwtService manageJwtService)
+        private readonly IUnitOfWork _unitOfWork;
+        public SignupRequestHandler(IMapper mapper, IAuthenticationRepository authRepository, IOptions<HashConfig> hashConfig, IManageJwtService manageJwtService, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _authRepository = authRepository;
             _hashConfig = hashConfig.Value;
             _manageJwtService = manageJwtService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<AuthenticationResponse> Handle(SignupRequest request, CancellationToken cancellationToken)
@@ -43,8 +46,10 @@ namespace Matario.Application.Features.Commands.AuthenticationModule.Handlers
             // convert signup request to entity
             var user = _mapper.Map<User>(request);
             user.Password = EncryptionUtilities.HashString(user.Password, _hashConfig.SecretKey);
+
             // save signup request in database
-            var savedUser = await _authRepository.AddAsync(user);
+            await _authRepository.AddAsync(user);
+            await _unitOfWork.SaveChangesAsync();
 
             // convert some data to jwt token
             AuthenticationResponse authenticationResponse = await _manageJwtService.GenerateAccessAndRefreshToken(user);

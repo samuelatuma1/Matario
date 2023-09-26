@@ -2,6 +2,7 @@
 using Matario.Application.Contracts.DataAccess.Common;
 using Matario.Application.Utilities;
 using Matario.Domain.Entities.Common;
+using Matario.Domain.Enums.Common;
 using Matario.Persistence.DbContexts;
 
 namespace Matario.Persistence.DataAccess.Common
@@ -15,15 +16,13 @@ namespace Matario.Persistence.DataAccess.Common
             _dbContext = dbContext;
 		}
 
-        public virtual async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
             entity.CreatedAt = DateAndTimeUtilities.Now();
             entity.UpdatedAt = DateAndTimeUtilities.Now();
             entity.RecordStatus = Domain.Enums.Common.RecordStatus.Active;
 
             await _dbContext.Set<TEntity>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
-            return entity;
         }
 
         public Task AddRangeAsync(TEntity entity)
@@ -31,14 +30,29 @@ namespace Matario.Persistence.DataAccess.Common
             throw new NotImplementedException();
         }
 
-        public int Delete(TEntity entity, bool soft = true)
+        public async Task<int> DeleteAsync(TEntity entity, bool soft = true)
         {
-            throw new NotImplementedException();
+            return await DeleteByIdAsync(entity.Id, soft);
         }
 
-        public int Delete(TId id, bool soft = true)
+        public async Task<int> DeleteByIdAsync(TId id, bool soft = true)
         {
-            throw new NotImplementedException();
+            TEntity? entityExists = await FindByIdAsync(id);
+            int count = 0;
+            if (entityExists is not null)
+            {
+
+                if (soft)
+                {
+                    entityExists.RecordStatus = RecordStatus.Deleted;
+                }
+                else
+                {
+                    _dbContext.Set<TEntity>().Remove(entityExists);
+                }
+                count = 1;
+            }
+            return count;
         }
 
         public async Task<IEnumerable<TEntity>> WhereAsync(Func<TEntity, bool> query)
@@ -47,9 +61,10 @@ namespace Matario.Persistence.DataAccess.Common
             return _dbContext.Set<TEntity>().Where(query);
         }
 
-        public Task<TEntity?> FindByIdAsync(TId id)
+        public async Task<TEntity?> FindByIdAsync(TId id)
         {
-            throw new NotImplementedException();
+            await Task.CompletedTask;
+            return _dbContext.Set<TEntity>().FirstOrDefault(entity => entity.Id.Equals(id));
         }
 
         public async Task<TEntity?> FirstOrDefaultAsync(Func<TEntity, bool> query)
@@ -58,9 +73,10 @@ namespace Matario.Persistence.DataAccess.Common
             return _dbContext.Set<TEntity>().FirstOrDefault(query);
         }
 
-        public Task UpdateAsync(TEntity entity)
+        public async virtual Task UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            await Task.CompletedTask;
+            _dbContext.Set<TEntity>().Update(entity);
         }
 
         public Task UpdateRangeAsync(Func<TEntity, bool> query, TEntity entity)

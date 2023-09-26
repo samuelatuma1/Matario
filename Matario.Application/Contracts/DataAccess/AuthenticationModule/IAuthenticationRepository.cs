@@ -8,6 +8,8 @@ namespace Matario.Application.Contracts.DataAccess.AuthenticationModule
     {
         Task<bool> IsUniqueEmail(string email);
         Task<User?> FindByEmailAsync(string email);
+
+        Task<bool> IsSuperAdmin(long userId);
     }
 }
 

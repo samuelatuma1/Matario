@@ -44,6 +44,29 @@ namespace Matario.Infrastructure.Services.AuthenticationServiceModule
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
         }
+
+        public IEnumerable<Claim> DecryptToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var decryptedToken = handler.ReadJwtToken(token);
+
+            return decryptedToken.Claims;
+        }
+
+        public bool IsValid(string token)
+        {
+            JwtSecurityToken jwtSecurityToken;
+            try
+            {
+                jwtSecurityToken = new JwtSecurityToken(token);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
+            return jwtSecurityToken.ValidTo > DateAndTimeUtilities.Now();
+        }
     }
 }
 

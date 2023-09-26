@@ -14,6 +14,7 @@ namespace Matario.Persistence.ModelConfigurations.AuthenticationModule
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
             builder.HasKey(e => e.Id);
+            builder.HasOne<User>();
         }
     }
 }

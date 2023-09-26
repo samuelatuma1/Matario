@@ -37,8 +37,11 @@ namespace Matario.Middlewares
 					errorResponse.Message = exception.Message;
 					errorResponse.Errors = exception.Errors;
 					break;
-
-				default:
+				case UnAuthorizedException exception:
+					statusCode = HttpStatusCode.Unauthorized;
+					errorResponse.Message = exception.Message;
+					break;
+                default:
 					errorResponse.Message = ex.Message;
 					break;
 			}

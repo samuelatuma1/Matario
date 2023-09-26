@@ -8,6 +8,8 @@ using Matario.Application.Contracts.DataAccess.Common;
 using Matario.Persistence.DataAccess.Common;
 using Matario.Application.Contracts.DataAccess.AuthenticationModule;
 using Matario.Persistence.DataAccess.AuthenticationModule;
+using Matario.Application.Contracts.UoW;
+using Matario.Persistence.UoW;
 
 namespace Matario.Persistence;
 public static class PersistenceServices
@@ -24,7 +26,11 @@ public static class PersistenceServices
         services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository< , >));
         services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        // Replace 'YourDbContext' with the name of your own DbContext derived class.
+        services.AddScoped<IRoleRepository, RoleRepository>();
+
+        // Unit of Work
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         services.AddDbContext<ApplicationDbContext>(
             dbContextOptions => dbContextOptions
                 .UseMySql(connectionString, serverVersion)
