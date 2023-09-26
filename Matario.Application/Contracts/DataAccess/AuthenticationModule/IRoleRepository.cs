@@ -8,6 +8,8 @@ namespace Matario.Application.Contracts.DataAccess.AuthenticationModule
 	{
 		Task<bool> IsUniqueRoleName(string roleName);
 
+		Task<Role?> GetRoleByName(string roleName);
+
 		Task<Role?> FindByIdAndUpdate(Role model);
     }
 }

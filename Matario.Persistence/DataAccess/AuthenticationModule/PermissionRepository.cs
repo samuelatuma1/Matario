@@ -7,21 +7,21 @@ using Matario.Persistence.Exceptions;
 
 namespace Matario.Persistence.DataAccess.AuthenticationModule
 {
-	public class RoleRepository : BaseRepository<Role, long>, IRoleRepository
+	public class PermissionRepository : BaseRepository<Permission, long>, IPermissionRepository
 	{
-		public RoleRepository(ApplicationDbContext dbContext) : base(dbContext)
+		public PermissionRepository(ApplicationDbContext dbContext) : base(dbContext)
 		{
 		}
 
-        public async Task<bool> IsUniqueRoleName(string roleName)
+        public async Task<bool> IsUniquePermissionName(string permissionName)
         {
-            var role = await FirstOrDefaultAsync(r => r.Name == roleName);
-            return role is null;
+            var permission = await FirstOrDefaultAsync(r => r.Name == permissionName);
+            return permission is null;
         }
 
-        public async Task<Role?> FindByIdAndUpdate(Role model)
+        public async Task<Permission?> FindByIdAndUpdate(Permission model)
         {
-            Role? entity  = await FindByIdAsync(model.Id);
+            Permission? entity  = await FindByIdAsync(model.Id);
             if(entity is null)
             {
                 return null;
@@ -34,10 +34,10 @@ namespace Matario.Persistence.DataAccess.AuthenticationModule
             if (isNameNotEmptyAndNewName)
             {
                 // ensure name is unique before updating
-                 bool isUniqueRoleName = await IsUniqueRoleName(model.Name);
-                if(!isUniqueRoleName)
+                 bool isUniquePermissionName = await IsUniquePermissionName(model.Name);
+                if(!isUniquePermissionName)
                 {
-                    throw new DatabaseException("Role name must be unique");
+                    throw new DatabaseException("Permission name must be unique");
                 }
                 entity.Name = model.Name;
             }
@@ -49,14 +49,14 @@ namespace Matario.Persistence.DataAccess.AuthenticationModule
             }
             catch(Exception ex)
             {
-                throw new DatabaseException($"An error occured while updating Role: {ex.Message}");
+                throw new DatabaseException($"An error occured while updating Permission: {ex.Message}");
             }
             
         }
 
-        public async Task<Role?> GetRoleByName(string roleName)
+        public async Task<Permission?> GetPermissionByName(string name)
         {
-            return await FirstOrDefaultAsync(role => role.Name.Equals(roleName));
+            return await FirstOrDefaultAsync(permission => permission.Name.Equals(name));
         }
     }
 }

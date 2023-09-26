@@ -37,7 +37,8 @@ namespace Matario.Controllers
 			return await _mediator.Send(signinRequest);
 		}
 
-		[HttpPost("[action]")]
+        [ServiceFilter(typeof(IsSuperAdminFilter<IManageJwtService>))]
+        [HttpPost("[action]")]
 		public async Task<Role> AddRole(CreateRoleRequest createRoleRequest)
 		{
 			return await _mediator.Send(createRoleRequest);
@@ -66,8 +67,14 @@ namespace Matario.Controllers
         {
 			var deleteRoleRequest = new DeleteRoleRequest(id);
             await _mediator.Send(deleteRoleRequest);
+        } 
+
+        [ServiceFilter(typeof(IsSuperAdminFilter<IManageJwtService>))]
+        [HttpPost("[action]")]
+        public async Task<Permission> AddPermission(CreatePermissionRequest createPermissionRequest)
+        {
+            return await _mediator.Send(createPermissionRequest);
         }
-        
     }
 }
 
