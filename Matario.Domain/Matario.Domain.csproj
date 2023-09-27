@@ -23,5 +23,6 @@
     <Folder Include="Entities\AuthenticationModule\" />
     <Folder Include="Enums\AuthenticationModule\" />
     <Folder Include="Entities\OrganisationModule\" />
+    <Folder Include="Entities\OrganisationModule\" />
   </ItemGroup>
 </Project>

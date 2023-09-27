@@ -42,6 +42,8 @@
     <None Remove="Features\Commands\OrganisationModule\Commands\" />
     <None Remove="Features\Commands\OrganisationModule\Responses\" />
     <None Remove="Features\Commands\OrganisationModule\Validators\" />
+    <None Remove="Contracts\DataAccess\OrganisationModule\" />
+    <None Remove="AutoMapperProfiles\OrganisationModule\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -79,6 +81,9 @@
     <Folder Include="Features\Commands\OrganisationModule\Commands\" />
     <Folder Include="Features\Commands\OrganisationModule\Responses\" />
     <Folder Include="Features\Commands\OrganisationModule\Validators\" />
+    <Folder Include="Features\Commands\OrganisationModule\" />
+    <Folder Include="Contracts\DataAccess\OrganisationModule\" />
+    <Folder Include="AutoMapperProfiles\OrganisationModule\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />

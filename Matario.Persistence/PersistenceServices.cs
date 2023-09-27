@@ -10,6 +10,8 @@ using Matario.Application.Contracts.DataAccess.AuthenticationModule;
 using Matario.Persistence.DataAccess.AuthenticationModule;
 using Matario.Application.Contracts.UoW;
 using Matario.Persistence.UoW;
+using Matario.Application.Contracts.DataAccess.OrganisationModule;
+using Matario.Persistence.DataAccess.OrganisationModule;
 
 namespace Matario.Persistence;
 public static class PersistenceServices
@@ -28,6 +30,7 @@ public static class PersistenceServices
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.AddScoped<IOrganisationRepository, OrganisationRepository>();
 
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

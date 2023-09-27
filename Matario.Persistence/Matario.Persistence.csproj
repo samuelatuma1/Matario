@@ -18,6 +18,8 @@
     <None Remove="DataAccess\Common\" />
     <None Remove="DataAccess\AuthenticationModule\" />
     <None Remove="Exceptions\" />
+    <None Remove="ModelConfigurations\OrganisationModule\" />
+    <None Remove="DataAccess\OrganisationModule\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ModelConfigurations\" />
@@ -29,6 +31,8 @@
     <Folder Include="DataAccess\AuthenticationModule\" />
     <Folder Include="UoW\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="ModelConfigurations\OrganisationModule\" />
+    <Folder Include="DataAccess\OrganisationModule\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />

@@ -29,7 +29,33 @@ namespace Matario.Persistence.ModelConfigurations.AuthenticationModule
                     CreatedAt = DateAndTimeUtilities.Now(),
                     UpdatedAt = DateAndTimeUtilities.Now(),
                     Description = "Super Admin Priviledges"
-                    
+                },
+                new Role()
+                {
+                    Id = 2,
+                    Name = "Admin",
+                    RecordStatus = Domain.Enums.Common.RecordStatus.Active,
+                    CreatedAt = DateAndTimeUtilities.Now(),
+                    UpdatedAt = DateAndTimeUtilities.Now(),
+                    Description = "Admin Priviledges"
+                },
+                new Role()
+                {
+                    Id = 3,
+                    Name = "CorporateAdmin",
+                    RecordStatus = Domain.Enums.Common.RecordStatus.Active,
+                    CreatedAt = DateAndTimeUtilities.Now(),
+                    UpdatedAt = DateAndTimeUtilities.Now(),
+                    Description = "CorporateAdmin Priviledges"
+                },
+                new Role()
+                {
+                    Id = 4,
+                    Name = "Manager",
+                    RecordStatus = Domain.Enums.Common.RecordStatus.Active,
+                    CreatedAt = DateAndTimeUtilities.Now(),
+                    UpdatedAt = DateAndTimeUtilities.Now(),
+                    Description = "Manager Priviledges"
                 }
                 ) ;
         }

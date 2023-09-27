@@ -30,8 +30,11 @@ builder.Services.Configure<RateLimitOptions>(builder.Configuration.GetSection(na
 builder.Configuration.GetSection(nameof(RateLimitOptions)).Bind(rateLimitOptions);
 var fixedPolicy = "fixed";
 
+// filter services
+builder.Services.AddScoped<HasAuthPermission>();
+builder.Services.AddScoped<IsSuperAdminFilter<IManageJwtService>>();
 
-
+// Rate Limiting
 builder.Services.AddRateLimiter(_ => _
     .AddFixedWindowLimiter(policyName: fixedPolicy, options =>
     {
@@ -41,7 +44,6 @@ builder.Services.AddRateLimiter(_ => _
         options.QueueLimit = rateLimitOptions.QueueLimit;
     }));
 
-builder.Services.AddScoped<IsSuperAdminFilter<IManageJwtService>>();
 var app = builder.Build();
 
 //  Register Filters

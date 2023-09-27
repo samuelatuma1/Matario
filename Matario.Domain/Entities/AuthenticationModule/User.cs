@@ -13,6 +13,8 @@ namespace Matario.Domain.Entities.AuthenticationModule
 		public UserRole UserRole { get; set; }
 
 		public List<Role> Roles { get; set; } = new ();
+
+		public long? OrganisationId { get; set; } 
     }
 }
 

@@ -76,8 +76,6 @@ namespace Matario.Controllers
             return await _mediator.Send(createPermissionRequest);
         }
 
-        
-
         [ServiceFilter(typeof(IsSuperAdminFilter<IManageJwtService>))]
         [HttpPost("[action]")]
         public async Task<Role> AddRolePermission(AddRolePermissionRequest addRolePermissionRequest)

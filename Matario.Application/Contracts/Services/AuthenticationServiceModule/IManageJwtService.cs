@@ -16,6 +16,8 @@ namespace Matario.Application.Contracts.Services.AuthenticationServiceModule
         Task<IEnumerable<Claim>> DecryptToken(string token);
 
         Task<bool> IsSuperAdmin(string token);
+
+        Task<bool> UserHasPermission(string token, string permissons);
     }
 }
 

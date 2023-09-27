@@ -24,12 +24,20 @@ namespace Matario.Persistence.ModelConfigurations.AuthenticationModule
                 new Permission()
                 {
                     Id = 1,
-                    Name = "Create Manager",
+                    Name = "CreateManager",
                     RecordStatus = Domain.Enums.Common.RecordStatus.Active,
                     CreatedAt = DateAndTimeUtilities.Now(),
                     UpdatedAt = DateAndTimeUtilities.Now(),
                     Description = "Allows users with permission to create Managers"
-                    
+                },
+                new Permission()
+                {
+                    Id = 2,
+                    Name = "DeleteManager",
+                    RecordStatus = Domain.Enums.Common.RecordStatus.Active,
+                    CreatedAt = DateAndTimeUtilities.Now(),
+                    UpdatedAt = DateAndTimeUtilities.Now(),
+                    Description = "Allows users with permission to create Managers"
                 }
                 ) ;
         }
