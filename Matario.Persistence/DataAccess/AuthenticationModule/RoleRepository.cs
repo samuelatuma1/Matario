@@ -4,6 +4,7 @@ using Matario.Domain.Entities.AuthenticationModule;
 using Matario.Persistence.DataAccess.Common;
 using Matario.Persistence.DbContexts;
 using Matario.Persistence.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Matario.Persistence.DataAccess.AuthenticationModule
 {
@@ -56,7 +57,7 @@ namespace Matario.Persistence.DataAccess.AuthenticationModule
 
         public async Task<Role?> GetRoleByName(string roleName)
         {
-            return await FirstOrDefaultAsync(role => role.Name.Equals(roleName));
+            return await _dbContext.Roles.Include(r => r.Permissions).FirstOrDefaultAsync(role => role.Name.Equals(roleName));
         }
     }
 }

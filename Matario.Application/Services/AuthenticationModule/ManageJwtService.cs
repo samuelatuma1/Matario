@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using System.Text.Json;
 using Matario.Application.Constants;
 using Matario.Application.Contracts.DataAccess.AuthenticationModule;
 using Matario.Application.Contracts.Services.AuthenticationServiceModule;
@@ -17,22 +18,43 @@ namespace Matario.Application.Services.AuthenticationModule
 		private readonly IJwtService _jwtService;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public ManageJwtService(IJwtService jwtService, IRefreshTokenRepository refreshTokenRepository, IUnitOfWork unitOfWork)
+        private readonly IRoleRepository _roleRepository;
+        private readonly IPermissionRepository _permissionRepository;
+        public ManageJwtService(IJwtService jwtService, IRefreshTokenRepository refreshTokenRepository, IUnitOfWork unitOfWork, IRoleRepository roleRepository, IPermissionRepository permissionRepository)
         {
             _jwtService = jwtService;
             _refreshTokenRepository = refreshTokenRepository;
             _unitOfWork = unitOfWork;
+            _roleRepository = roleRepository;
+            _permissionRepository = permissionRepository;
         }
-        public AccessTokenDTO GenerateAccessToken(User user)
+        public async Task<AccessTokenDTO> GenerateAccessToken(User user)
         {
             const int accessTokenDuration = ApplicationConstants.TimeConstants.MinutesInAnHour * ApplicationConstants.TimeConstants.HoursInADay;
             var accessTokenExpirationTime = DateAndTimeUtilities.AddMinutes(accessTokenDuration);
 
+
+            // get all roleIds
+            IEnumerable<long> roleIds = new List<long>();
+            IEnumerable<string> roleNames = new List<string>();
+            user.Roles.ForEach(role =>
+            {
+                roleNames.Append(role.Name);
+                roleIds.Append(role.Id);
+            });
+            // get the permissions for each role user has
+            IEnumerable<string> permissionNames = (await _permissionRepository.GetPermissionsForRoles(roleIds))
+                .Select(permission => permission.Name);
+            // Add roles and permissions of user to claims
+            string permissionsClaim = JsonSerializer.Serialize(permissionNames);
+            string rolesClaim = JsonSerializer.Serialize(roleNames);
             var accessTokenClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
-                new Claim("Id", user.Id.ToString())
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Roles", rolesClaim),
+                new Claim("permissionsClaim", permissionsClaim)
             };
             string generatedToken = _jwtService.GenerateToken(accessTokenClaims, accessTokenExpirationTime);
 
@@ -85,7 +107,7 @@ namespace Matario.Application.Services.AuthenticationModule
 
         public async Task<AuthenticationResponse> GenerateAccessAndRefreshToken(User user)
         {
-            AccessTokenDTO accessToken= GenerateAccessToken(user);
+            AccessTokenDTO accessToken= await GenerateAccessToken(user);
             RefreshToken refreshToken = await GenerateRefreshTokenForUserAsync(user);
 
             return new AuthenticationResponse

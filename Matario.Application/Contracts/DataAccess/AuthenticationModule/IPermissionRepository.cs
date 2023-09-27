@@ -11,6 +11,8 @@ namespace Matario.Application.Contracts.DataAccess.AuthenticationModule
 		Task<Permission?> FindByIdAndUpdate(Permission model);
 
 		Task<Permission?> GetPermissionByName(string name);
+
+		Task<IEnumerable<Permission>> GetPermissionsForRoles(IEnumerable<long> roleIds);
     }
 }
 

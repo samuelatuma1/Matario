@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Matario.Domain.Entities.Common;
 
 namespace Matario.Domain.Entities.AuthenticationModule
@@ -11,6 +12,7 @@ namespace Matario.Domain.Entities.AuthenticationModule
 
 		public long? CreatedBy { get; set; }
 
+		[JsonIgnore]
 		public List<Role> Roles { get; set; } = new();
     }
 }

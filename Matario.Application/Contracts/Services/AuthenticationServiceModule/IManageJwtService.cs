@@ -7,7 +7,7 @@ namespace Matario.Application.Contracts.Services.AuthenticationServiceModule
 {
 	public interface IManageJwtService 
 	{
-        AccessTokenDTO GenerateAccessToken(User user);
+        Task<AccessTokenDTO> GenerateAccessToken(User user);
 
         Task<RefreshToken> GenerateRefreshTokenForUserAsync(User user);
 
