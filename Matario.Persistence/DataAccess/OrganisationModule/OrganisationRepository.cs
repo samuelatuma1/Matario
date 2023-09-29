@@ -13,13 +13,23 @@ namespace Matario.Persistence.DataAccess.OrganisationModule
 		{
 		}
 
+        public async Task<Organisation?> GetOrganisationByName(string name)
+        {
+            await Task.CompletedTask;
+            return _dbContext.Organisations.FirstOrDefault(org => org.Name.ToLower().Equals(name.ToLower()));
+        }
+
         public async Task<bool> IsUniqueName(string name)
         {
             await Task.CompletedTask;
             Organisation? organisation = _dbContext.Organisations.FirstOrDefault(org => org.Name.Equals(name));
 
             return organisation is null;
+        }
 
+        public async Task<bool> OrganisationWithNameExists(string name)
+        {
+            return !(await IsUniqueName(name));
         }
     }
 }

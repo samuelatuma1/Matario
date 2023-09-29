@@ -17,41 +17,23 @@ namespace Matario.Application.Features.Commands.AuthenticationModule.Handlers
 {
 	public class SignupRequestHandler : IRequestHandler<SignupRequest, AuthenticationResponse>
 	{
-        private readonly IMapper _mapper;
-        private readonly IAuthenticationRepository _authRepository;
-        private readonly HashConfig _hashConfig;
+        private readonly IUserService _userService;
         private readonly IManageJwtService _manageJwtService;
-        private readonly IUnitOfWork _unitOfWork;
-        public SignupRequestHandler(IMapper mapper, IAuthenticationRepository authRepository, IOptions<HashConfig> hashConfig, IManageJwtService manageJwtService, IUnitOfWork unitOfWork)
+        public SignupRequestHandler( IUserService userService, IManageJwtService manageJwtService)
         {
-            _mapper = mapper;
-            _authRepository = authRepository;
-            _hashConfig = hashConfig.Value;
+            _userService = userService;
             _manageJwtService = manageJwtService;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task<AuthenticationResponse> Handle(SignupRequest request, CancellationToken cancellationToken)
         {
-            // validate sign up request
-            var signupRequestValidator = new SignupRequestValidator(_authRepository);
-            var signUpValidationResult = await signupRequestValidator.ValidateAsync(request, cancellationToken);
+            SignUpDTO signUpDTO = new (Email: request.Email, Password: request.Password);
 
-            if (signUpValidationResult.Errors.Any())
-            {
-                IDictionary<string, string> errors = signUpValidationResult.Errors.ToDictionary(error => error.PropertyName, error => error.ErrorMessage);
-                throw new ValidationException("Validation errors", errors);
-            }
+            // Creates a user. Ensures user signs up with a valid and unique email.
+            await _userService.CreateUser(signUpDTO, cancellationToken);
 
-            // convert signup request to entity
-            var user = _mapper.Map<User>(request);
-            user.Password = EncryptionUtilities.HashString(user.Password, _hashConfig.SecretKey);
-
-            // save signup request in database
-            await _authRepository.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
-
-            // convert some data to jwt token
+            // Creates access and Refresh token for the created user
+            var user = await _userService.GetUserByEmail(request.Email);
             AuthenticationResponse authenticationResponse = await _manageJwtService.GenerateAccessAndRefreshToken(user);
 
             return authenticationResponse;

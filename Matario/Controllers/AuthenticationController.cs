@@ -4,6 +4,7 @@ using Matario.Application.DTOs.AuthenticationModule;
 using Matario.Application.Features.Commands.AuthenticationModule.Handlers;
 using Matario.Application.Features.Commands.AuthenticationModule.Requests;
 using Matario.Application.Features.Queries.AuthenticationModule.Requests;
+using Matario.Constants;
 using Matario.Controllers.Common;
 using Matario.Domain.Entities.AuthenticationModule;
 using Matario.Filters;
@@ -60,7 +61,6 @@ namespace Matario.Controllers
 			return await _mediator.Send(updateRoleRequest);
 		}
 
-
         [ServiceFilter(typeof(IsSuperAdminFilter<IManageJwtService>))]
         [HttpDelete("[action]/{id}")]
         public async Task DeleteRole([FromRoute]long id)
@@ -81,6 +81,20 @@ namespace Matario.Controllers
         public async Task<Role> AddRolePermission(AddRolePermissionRequest addRolePermissionRequest)
         {
             return await _mediator.Send(addRolePermissionRequest);
+        }
+
+        [ServiceFilter(typeof(IsSuperAdminFilter<IManageJwtService>))]
+        [HttpPost("[action]")]
+        public async Task<User?> CreateOrganisationCorporateAdmin(CreateOrganisationUserCommand command)
+        {
+            string corporateAdmin = ApplicationConstants.RoleConstants.CorporateAdmin;
+            CreateOrganisationUserWithRoleCommand createOrganisationUserWithRole = new (
+                Email: command.Email,
+                Password : command.Password,
+                OrganisationName: command.OrganisationName,
+                RoleName: corporateAdmin
+                );
+            return await _mediator.Send(createOrganisationUserWithRole);
         }
     }
 }

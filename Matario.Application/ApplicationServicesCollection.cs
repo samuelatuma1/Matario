@@ -16,6 +16,7 @@ public static class ApplicationServicesCollection
 
         // Add Services
         services.AddScoped<IManageJwtService, ManageJwtService>();
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }

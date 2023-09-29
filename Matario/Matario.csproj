@@ -24,6 +24,7 @@
     <None Remove="Filters\" />
     <None Remove="Controllers\Common\" />
     <None Remove="Exceptions\" />
+    <None Remove="Constants\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Middlewares\" />
@@ -32,6 +33,7 @@
     <Folder Include="Filters\" />
     <Folder Include="Controllers\Common\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Constants\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Matario.Application\Matario.Application.csproj">

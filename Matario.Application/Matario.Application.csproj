@@ -44,6 +44,7 @@
     <None Remove="Features\Commands\OrganisationModule\Validators\" />
     <None Remove="Contracts\DataAccess\OrganisationModule\" />
     <None Remove="AutoMapperProfiles\OrganisationModule\" />
+    <None Remove="Services\AuthenticationModule\Validators\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -84,6 +85,7 @@
     <Folder Include="Features\Commands\OrganisationModule\" />
     <Folder Include="Contracts\DataAccess\OrganisationModule\" />
     <Folder Include="AutoMapperProfiles\OrganisationModule\" />
+    <Folder Include="Services\AuthenticationModule\Validators\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />

@@ -32,9 +32,8 @@ namespace Matario.Application.Services.AuthenticationModule
         public async Task<AccessTokenDTO> GenerateAccessToken(User user)
         {
             // getting access token duration
-            const int accessTokenDuration = ApplicationConstants.TimeConstants.MinutesInAnHour * ApplicationConstants.TimeConstants.HoursInADay;
+            const int accessTokenDuration = TimeConstants.MinutesInAnHour * TimeConstants.HoursInADay;
             var accessTokenExpirationTime = DateAndTimeUtilities.AddMinutes(accessTokenDuration);
-
 
             // get all roleIds
             List<long> roleIds = new ();
@@ -73,11 +72,9 @@ namespace Matario.Application.Services.AuthenticationModule
         public async Task<RefreshToken> GenerateRefreshTokenForUserAsync(User user)
         {
 
-            const int minutesInAnHour = 60;
-            const int hoursInADay = 24;
             const int daysInAMonth = 30;
 
-            const int refreshTokenDuration = minutesInAnHour * hoursInADay * daysInAMonth;
+            const int refreshTokenDuration = TimeConstants.MinutesInAnHour * TimeConstants.HoursInADay * daysInAMonth;
             var refreshTokenExpirationTime = DateAndTimeUtilities.AddMinutes(refreshTokenDuration);
 
 
@@ -177,10 +174,10 @@ namespace Matario.Application.Services.AuthenticationModule
 
             try
             {
-                // user permission saved as lower case duriong jwt encryption
+                // user permission saved as lower case during jwt encryption
                 userPermissionsSet = JsonSerializer.Deserialize<HashSet<string>>(permissionsClaimAsString) ?? new HashSet<string>();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }

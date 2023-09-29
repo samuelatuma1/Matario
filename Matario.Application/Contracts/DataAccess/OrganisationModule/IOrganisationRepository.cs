@@ -7,6 +7,11 @@ namespace Matario.Application.Contracts.DataAccess.OrganisationModule
 	public interface IOrganisationRepository : IBaseRepository<Organisation, long>
 	{
 		Task<bool> IsUniqueName(string name);
-	}
+
+		Task<bool> OrganisationWithNameExists(string name);
+
+		Task<Organisation?> GetOrganisationByName(string name);
+
+    }
 }
 
