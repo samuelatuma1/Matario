@@ -30,6 +30,8 @@ namespace Matario.Filters
             {
                 throw new UnAuthorizedException("Not allowed");
             }
+
+            //TODO: Add organisation Name to User request somehow
             await next();
         }
     }

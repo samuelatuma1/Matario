@@ -25,5 +25,21 @@ namespace Matario.Application.Constants
             public const string DefaultUserPassword = "Password123$";
         }
     }
+
+    public static partial class ApplicationConstants
+    {
+        public static class PermissionConstants
+        {
+            public const string AdminCreate = "AdminCreate";
+            public const string CreateManager = "Create Manager";
+        }
+
+        public static class RoleConstants
+        {
+            public const string Admin = "Admin";
+            public const string CorporateAdmin = "CorporateAdmin";
+            public const string Manager = "Manager";
+        }
+    }
 }
 

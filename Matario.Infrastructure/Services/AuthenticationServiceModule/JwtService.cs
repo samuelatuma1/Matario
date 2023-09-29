@@ -60,7 +60,7 @@ namespace Matario.Infrastructure.Services.AuthenticationServiceModule
             {
                 jwtSecurityToken = new JwtSecurityToken(token);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
