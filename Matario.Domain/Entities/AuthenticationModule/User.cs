@@ -1,5 +1,6 @@
 ﻿using System;
 using Matario.Domain.Entities.Common;
+using Matario.Domain.Entities.OrganisationModule;
 using Matario.Domain.Enums.AuthenticationModule;
 
 namespace Matario.Domain.Entities.AuthenticationModule
@@ -14,7 +15,9 @@ namespace Matario.Domain.Entities.AuthenticationModule
 
 		public List<Role> Roles { get; set; } = new ();
 
-		public long? OrganisationId { get; set; } 
+		public long? OrganisationId { get; set; }
+
+		public Organisation? Organisation { get; set; }
     }
 }
 

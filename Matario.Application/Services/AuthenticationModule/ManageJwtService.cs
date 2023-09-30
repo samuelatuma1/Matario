@@ -29,7 +29,7 @@ namespace Matario.Application.Services.AuthenticationModule
             _permissionRepository = permissionRepository;
             
         }
-        public async Task<AccessTokenDTO> GenerateAccessToken(User user)
+        public async Task<AccessTokenDTO> GenerateAccessTokenAsync(User user)
         {
             // getting access token duration
             const int accessTokenDuration = TimeConstants.MinutesInAnHour * TimeConstants.HoursInADay;
@@ -44,6 +44,7 @@ namespace Matario.Application.Services.AuthenticationModule
                 roleIds.Add(role.Id);
             });
 
+
             // get the permissions for each role user has
             IEnumerable<string> permissionNames = (await _permissionRepository.GetPermissionsForRoles(roleIds))
                 .Select(permission => permission.Name.ToLower()); // to lower helps to maintain case insensitive search later on
@@ -51,14 +52,19 @@ namespace Matario.Application.Services.AuthenticationModule
             // Add roles and permissions of user to claims
             string permissionsClaim = JsonSerializer.Serialize(permissionNames);
             string rolesClaim = JsonSerializer.Serialize(roleNames);
-            
+
+
+            // get user organisation name
+            string organisationName = user.Organisation?.Name ?? string.Empty;
+
             var accessTokenClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
                 new Claim(ClaimConstants.IdClaimType, user.Id.ToString()),
                 new Claim(ClaimConstants.RolesClaimType, rolesClaim),
-                new Claim(ClaimConstants.PermissionsClaimType, permissionsClaim)
+                new Claim(ClaimConstants.PermissionsClaimType, permissionsClaim),
+                new Claim(ClaimConstants.OrgansiationClaimType, organisationName)
             };
             string generatedToken = _jwtService.GenerateToken(accessTokenClaims, accessTokenExpirationTime);
 
@@ -109,7 +115,7 @@ namespace Matario.Application.Services.AuthenticationModule
 
         public async Task<AuthenticationResponse> GenerateAccessAndRefreshToken(User user)
         {
-            AccessTokenDTO accessToken= await GenerateAccessToken(user);
+            AccessTokenDTO accessToken= await GenerateAccessTokenAsync(user);
             RefreshToken refreshToken = await GenerateRefreshTokenForUserAsync(user);
 
             return new AuthenticationResponse
@@ -136,10 +142,7 @@ namespace Matario.Application.Services.AuthenticationModule
 
             return claims;
         }
-        public string? GetClaimValue(IEnumerable<Claim> claims, string claimType)
-        {
-            return claims.FirstOrDefault(claim => claim.Type == claimType)?.Value;
-        }
+        
         public async Task<bool> IsSuperAdmin(string token)
         {
             
@@ -148,23 +151,33 @@ namespace Matario.Application.Services.AuthenticationModule
             
         }
 
-        public  bool IsSuperAdmin(IEnumerable<Claim> claims)
-        {
-            try
-            {
-                var claimValue = GetClaimValue(claims, ClaimTypes.Role);
-                return UserRole.SuperAdmin.ToString().Equals(claimValue);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        public async Task<bool> UserHasPermission(string token, string permissons = "")
+        
+        public async Task<bool> UserHasPermission(string token, string permissions = "")
         {
             // decrypt token
             IEnumerable<Claim> claims = await DecryptToken(token);
 
+            return ValidateUserClaimsHasRequiredPermision(claims, permissions);
+        }
+
+        public async Task<HasPermissionAndOrganisationNameDTO> ValidatePermissionAndGetOrganisationName(string token, string permissions)
+        {
+            IEnumerable<Claim> claims = await DecryptToken(token);
+
+
+            bool userHasPermission = ValidateUserClaimsHasRequiredPermision(claims, permissions);
+
+            var organisationName = GetClaimValue(claims, ClaimConstants.OrgansiationClaimType) ?? string.Empty;
+
+            return new HasPermissionAndOrganisationNameDTO()
+            {
+                HasPermission = userHasPermission,
+                OrganisationName = organisationName
+            };
+        }
+
+        public static bool ValidateUserClaimsHasRequiredPermision(IEnumerable<Claim> claims, string permissions)
+        {
             if (IsSuperAdmin(claims)) return true;
 
             string? permissionsClaimAsString = GetClaimValue(claims, ClaimConstants.PermissionsClaimType);
@@ -177,16 +190,16 @@ namespace Matario.Application.Services.AuthenticationModule
                 // user permission saved as lower case during jwt encryption
                 userPermissionsSet = JsonSerializer.Deserialize<HashSet<string>>(permissionsClaimAsString) ?? new HashSet<string>();
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
 
             // deserialize permissions
-            IEnumerable<string> requiredPermissions = permissons.Split(",").Select(requiredPermission => requiredPermission.Trim().ToLower());
-            
+            IEnumerable<string> requiredPermissions = permissions.Split(",").Select(requiredPermission => requiredPermission.Trim().ToLower());
+
             // filter to see if user has at least one of the permissions
-            foreach(string requiredPermission in requiredPermissions)
+            foreach (string requiredPermission in requiredPermissions)
             {
                 bool userHasPermission = userPermissionsSet.Contains(requiredPermission);
                 if (userHasPermission)
@@ -196,6 +209,23 @@ namespace Matario.Application.Services.AuthenticationModule
             }
 
             return false;
+        }
+        public static string? GetClaimValue(IEnumerable<Claim> claims, string claimType)
+        {
+            return claims.FirstOrDefault(claim => claim.Type == claimType)?.Value;
+        }
+
+        public static bool IsSuperAdmin(IEnumerable<Claim> claims)
+        {
+            try
+            {
+                var claimValue = GetClaimValue(claims, ClaimTypes.Role);
+                return UserRole.SuperAdmin.ToString().Equals(claimValue);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

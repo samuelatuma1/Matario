@@ -17,7 +17,7 @@ namespace Matario.Persistence.ModelConfigurations.OrganisationModule
             builder.HasKey(organisation => organisation.Id);
             builder.HasIndex(organisation => organisation.Name);
             builder.HasMany(organisation => organisation.Users)
-                .WithOne()
+                .WithOne(user => user.Organisation)
                 .HasForeignKey(user => user.OrganisationId)
                 .IsRequired(false);
         }

@@ -113,6 +113,7 @@ namespace Matario.Application.Services.AuthenticationModule
                     .Errors.ToDictionary(error => error.PropertyName, error => error.ErrorMessage);
                 throw new ValidationException("Validation errors", errors);
             }
+
             // Get organisation id
             Organisation organisation = await _organisationRepository.GetOrganisationByName(organisationUser.OrganisationName) ??
                 throw new NotFoundException($"Organisation with name {organisationUser.OrganisationName} not found");

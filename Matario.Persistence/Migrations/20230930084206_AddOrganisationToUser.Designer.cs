@@ -3,6 +3,7 @@ using System;
 using Matario.Persistence.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Matario.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230930084206_AddOrganisationToUser")]
+    partial class AddOrganisationToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,20 +56,20 @@ namespace Matario.Persistence.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 63, DateTimeKind.Utc).AddTicks(2460),
+                            CreatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 569, DateTimeKind.Utc).AddTicks(2490),
                             Description = "Allows users with permission to create Managers",
                             Name = "CreateManager",
                             RecordStatus = 1,
-                            UpdatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 63, DateTimeKind.Utc).AddTicks(2460)
+                            UpdatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 569, DateTimeKind.Utc).AddTicks(2490)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 63, DateTimeKind.Utc).AddTicks(2550),
+                            CreatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 569, DateTimeKind.Utc).AddTicks(2600),
                             Description = "Allows users with permission to create Managers",
                             Name = "DeleteManager",
                             RecordStatus = 1,
-                            UpdatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 63, DateTimeKind.Utc).AddTicks(2550)
+                            UpdatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 569, DateTimeKind.Utc).AddTicks(2600)
                         });
                 });
 
@@ -142,42 +145,42 @@ namespace Matario.Persistence.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6730),
+                            CreatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(400),
                             CreatedBy = 0L,
                             Description = "Super Admin Priviledges",
                             Name = "SuperAdmin",
                             RecordStatus = 1,
-                            UpdatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6730)
+                            UpdatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(410)
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6900),
+                            CreatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(420),
                             CreatedBy = 0L,
                             Description = "Admin Priviledges",
                             Name = "Admin",
                             RecordStatus = 1,
-                            UpdatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6900)
+                            UpdatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(420)
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6910),
+                            CreatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(430),
                             CreatedBy = 0L,
                             Description = "CorporateAdmin Priviledges",
                             Name = "CorporateAdmin",
                             RecordStatus = 1,
-                            UpdatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6910)
+                            UpdatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(430)
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6910),
+                            CreatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(440),
                             CreatedBy = 0L,
                             Description = "Manager Priviledges",
                             Name = "Manager",
                             RecordStatus = 1,
-                            UpdatedAt = new DateTime(2023, 9, 30, 19, 35, 56, 70, DateTimeKind.Utc).AddTicks(6910)
+                            UpdatedAt = new DateTime(2023, 9, 30, 8, 42, 6, 576, DateTimeKind.Utc).AddTicks(440)
                         });
                 });
 
@@ -213,6 +216,9 @@ namespace Matario.Persistence.Migrations
                     b.Property<long?>("OrganisationId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("OrganisationId1")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -229,6 +235,8 @@ namespace Matario.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrganisationId");
+
+                    b.HasIndex("OrganisationId1");
 
                     b.ToTable("Users");
                 });
@@ -308,9 +316,13 @@ namespace Matario.Persistence.Migrations
 
             modelBuilder.Entity("Matario.Domain.Entities.AuthenticationModule.User", b =>
                 {
-                    b.HasOne("Matario.Domain.Entities.OrganisationModule.Organisation", "Organisation")
+                    b.HasOne("Matario.Domain.Entities.OrganisationModule.Organisation", null)
                         .WithMany("Users")
                         .HasForeignKey("OrganisationId");
+
+                    b.HasOne("Matario.Domain.Entities.OrganisationModule.Organisation", "Organisation")
+                        .WithMany()
+                        .HasForeignKey("OrganisationId1");
 
                     b.Navigation("Organisation");
                 });

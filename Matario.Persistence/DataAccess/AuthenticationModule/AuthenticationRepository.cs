@@ -18,7 +18,7 @@ public class AuthenticationRepository : BaseRepository<User, long>, IAuthenticat
 
     public async Task<User?> FindByEmailAsync(string email)
     {
-        return await _dbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(user => user.Email.Equals(email));
+        return await _dbContext.Users.Include(u => u.Roles).Include(u => u.Organisation).FirstOrDefaultAsync(user => user.Email.Equals(email));
     }
 
     public async Task<bool> IsSuperAdmin(long userId)

@@ -15,6 +15,7 @@ namespace Matario.Application.Constants
             public const string PermissionsClaimType = "Permissions";
             public const string RolesClaimType = "Roles";
             public const string IdClaimType = "Id";
+            public const string OrgansiationClaimType = "organisation";
         }
 	}
 
